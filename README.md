@@ -97,9 +97,27 @@ In `insights.html`, copy one `<article class="post">` block.
 
 ### Colors and fonts
 All in the `:root` block at the top of `assets/css/styles.css`. Change
-`--penn-red` once and it updates everywhere. Dark mode is handled automatically
+`--teal` once and it updates everywhere. Dark mode is handled automatically
 by a matching block near the bottom of the file — if you change a brand color,
 glance at that block too.
+
+The tokens worth knowing:
+
+| Token | What it controls |
+| --- | --- |
+| `--teal`, `--teal-dark` | Accent: links, primary buttons, eyebrows |
+| `--teal-deep` | Background of the hero, footer, and dark bands |
+| `--bg`, `--bg-2` | The grey page background |
+| `--surface`, `--surface-2` | Cards and panels sitting on that grey |
+| `--ink`, `--ink-2`, `--ink-3` | Body text, from darkest to most muted |
+| `--on-dark*` | Text and buttons on the dark teal bands |
+| `--line`, `--line-strong` | Dividers and hover borders |
+| `--line-control` | Borders of inputs and buttons — keep this at 3:1 |
+
+There is no white and no red anywhere in the palette; both were replaced. If
+you reintroduce a color, check it at
+[webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/)
+against whichever background it lands on.
 
 ### Previewing your changes
 Double-clicking an HTML file works for most things. For the real thing, run a

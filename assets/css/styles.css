@@ -26,29 +26,40 @@
 /* 01. Tokens ============================================================== */
 
 :root {
-  /* Brand. Penn red and Penn blue, used as accents against a light page. */
-  --penn-red: #990000;
-  --penn-red-dark: #7a0000;
-  --penn-blue: #011f5b;
-  --penn-blue-soft: #0b3a8f;
-  --amber: #b5701a;
+  /* Brand. Teal accents and a teal-tinted charcoal, against a grey page. */
+  --teal: #14666e;
+  --teal-dark: #0e4a51;
+  --teal-deep: #10333a;
 
-  /* Neutrals */
-  --ink: #16181d;
-  --ink-2: #3c414b;
-  --ink-3: #646b78;
-  --line: #e3e1dc;
-  --line-strong: #cbc7c0;
-  --bg: #fbfaf8;
-  --bg-2: #f3f1ec;
-  --surface: #ffffff;
-  --surface-2: #f7f5f1;
+  /* Neutrals. Cool greys, faintly teal-tinted so they sit with the brand. */
+  --ink: #171a1c;
+  --ink-2: #3a4247;
+  --ink-3: #566165;
+  --line: #d3dadb;
+  --line-strong: #b4bfc1;
+  /* Borders of actual controls (inputs, secondary buttons, the nav toggle).
+     Darker than --line-strong on purpose: WCAG 1.4.11 wants 3:1 for the
+     boundary of anything you can click, which --line-strong does not reach. */
+  --line-control: #6b7d81;
+  --bg: #e8ecec;
+  --bg-2: #dde3e3;
+  --surface: #f4f6f6;
+  --surface-2: #e8ecec;
 
   /* Semantic */
-  --accent: var(--penn-red);
-  --accent-ink: var(--penn-red-dark);
+  --accent: var(--teal);
+  --accent-ink: var(--teal-dark);
   --on-accent: #ffffff;
-  --focus: #0b3a8f;
+  --focus: #0b6e78;
+
+  /* Text and controls sitting on a dark section: hero, .section--ink, footer.
+     These were 11 near-duplicate hard-coded hexes before; one ramp now. */
+  --dark-bg: var(--teal-deep);
+  --on-dark: #f2f7f7;
+  --on-dark-2: #c3d3d5;
+  --on-dark-3: #97a9ad;
+  --on-dark-accent: #6fd0d6;
+  --on-dark-hover: #dce8e8;
 
   /* Type */
   --font-display: "Source Serif 4", "Iowan Old Style", "Palatino Linotype",
@@ -83,8 +94,8 @@
   /* Shape */
   --radius: 4px;
   --radius-lg: 8px;
-  --shadow-sm: 0 1px 2px rgb(22 24 29 / 6%), 0 1px 3px rgb(22 24 29 / 4%);
-  --shadow: 0 2px 4px rgb(22 24 29 / 5%), 0 8px 24px rgb(22 24 29 / 7%);
+  --shadow-sm: 0 1px 2px rgb(23 26 28 / 6%), 0 1px 3px rgb(23 26 28 / 4%);
+  --shadow: 0 2px 4px rgb(23 26 28 / 5%), 0 8px 24px rgb(23 26 28 / 7%);
 
   /* Layout */
   --measure: 68ch;
@@ -133,8 +144,8 @@ hr {
 }
 
 ::selection {
-  background: var(--penn-red);
-  color: #fff;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 :focus-visible {
@@ -149,8 +160,8 @@ hr {
   top: -100px;
   z-index: 200;
   padding: var(--sp-3) var(--sp-4);
-  background: var(--penn-blue);
-  color: #fff;
+  background: var(--dark-bg);
+  color: var(--on-dark);
   border-radius: var(--radius);
   font-weight: 600;
   text-decoration: none;
@@ -302,23 +313,23 @@ small,
 }
 
 .section--ink {
-  background: var(--penn-blue);
-  color: #e8ecf5;
+  background: var(--dark-bg);
+  color: var(--on-dark);
   border-block: 0;
 }
 
 .section--ink h2,
 .section--ink h3 {
-  color: #fff;
+  color: var(--on-dark);
 }
 
 .section--ink .lede,
 .section--ink p {
-  color: #c3cde3;
+  color: var(--on-dark-2);
 }
 
 .section--ink .eyebrow {
-  color: #8fb0ef;
+  color: var(--on-dark-accent);
 }
 
 .section-head {
@@ -375,7 +386,7 @@ small,
   z-index: 100;
   /* Nearly opaque on purpose. At 88% the body text of a long page (the
      constitution especially) reads through the bar as you scroll. */
-  background: rgb(251 250 248 / 96%);
+  background: rgb(232 236 236 / 96%);
   backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--line);
 }
@@ -438,7 +449,7 @@ small,
   align-items: center;
   gap: var(--sp-2);
   background: none;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
   padding: var(--sp-2) var(--sp-3);
   font: inherit;
@@ -574,13 +585,13 @@ a {
 }
 
 a:hover {
-  color: var(--penn-red);
+  color: var(--accent);
 }
 
 /* Inline links only. Without :not(.btn) this beats .btn--light on
    specificity and paints pale blue text onto a white button. */
 .section--ink a:not(.btn) {
-  color: #a9c4ff;
+  color: var(--on-dark-accent);
 }
 
 .btn {
@@ -605,20 +616,20 @@ a:hover {
 }
 
 .btn--primary {
-  background: var(--penn-red);
-  border-color: var(--penn-red);
+  background: var(--accent);
+  border-color: var(--accent);
   color: var(--on-accent);
 }
 
 .btn--primary:hover {
-  background: var(--penn-red-dark);
-  border-color: var(--penn-red-dark);
-  color: #fff;
+  background: var(--accent-ink);
+  border-color: var(--accent-ink);
+  color: var(--on-accent);
 }
 
 .btn--secondary {
   background: transparent;
-  border-color: var(--line-strong);
+  border-color: var(--line-control);
   color: var(--ink);
 }
 
@@ -631,24 +642,24 @@ a:hover {
 .btn--ghost {
   background: transparent;
   border-color: rgb(255 255 255 / 35%);
-  color: #fff;
+  color: var(--on-dark);
 }
 
 .btn--ghost:hover {
   background: rgb(255 255 255 / 10%);
-  border-color: #fff;
-  color: #fff;
+  border-color: var(--on-dark);
+  color: var(--on-dark);
 }
 
 .btn--light {
-  background: #fff;
-  border-color: #fff;
-  color: var(--penn-blue);
+  background: var(--on-dark);
+  border-color: var(--on-dark);
+  color: var(--dark-bg);
 }
 
 .btn--light:hover {
-  background: #e8ecf5;
-  color: var(--penn-blue);
+  background: var(--on-dark-hover);
+  color: var(--dark-bg);
 }
 
 .btn--sm {
@@ -680,8 +691,8 @@ a:hover {
 .hero {
   position: relative;
   overflow: hidden;
-  background: var(--penn-blue);
-  color: #fff;
+  background: var(--dark-bg);
+  color: var(--on-dark);
   padding-block: var(--sp-9);
 }
 
@@ -715,7 +726,7 @@ a:hover {
 
 .hero h1 {
   font-size: var(--fs-4xl);
-  color: #fff;
+  color: var(--on-dark);
   margin-bottom: var(--sp-5);
   /* `balance` (inherited from the shared heading rule) equalizes line lengths,
      which on a heading this long produces a tall, narrow, ragged block. Let it
@@ -726,12 +737,12 @@ a:hover {
 .hero__lede {
   font-size: var(--fs-lg);
   line-height: 1.5;
-  color: #c9d4ea;
+  color: var(--on-dark-2);
   margin-bottom: var(--sp-6);
 }
 
 .hero__eyebrow {
-  color: #8fb0ef;
+  color: var(--on-dark-accent);
 }
 
 .hero__actions {
@@ -1043,7 +1054,7 @@ a:hover {
 .tag {
   display: inline-block;
   padding: 0.2em 0.65em;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: 999px;
   font-size: var(--fs-xs);
   font-weight: 600;
@@ -1123,7 +1134,7 @@ a:hover {
 }
 
 .section--ink .stat__value {
-  color: #fff;
+  color: var(--on-dark);
 }
 
 .stat__label {
@@ -1134,7 +1145,7 @@ a:hover {
 }
 
 .section--ink .stat__label {
-  color: #a9b7d4;
+  color: var(--on-dark-3);
 }
 
 /* 10. Tables ============================================================== */
@@ -1433,7 +1444,7 @@ textarea {
   font-size: var(--fs-sm);
   color: var(--ink);
   background: var(--surface);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line-control);
   border-radius: var(--radius);
 }
 
@@ -1465,19 +1476,19 @@ textarea {
 /* 15. Footer ============================================================== */
 
 .site-footer {
-  background: var(--penn-blue);
-  color: #b9c5de;
+  background: var(--dark-bg);
+  color: var(--on-dark-2);
   padding-block: var(--sp-7) var(--sp-5);
   font-size: var(--fs-sm);
 }
 
 .site-footer a {
-  color: #d5deef;
+  color: var(--on-dark-2);
   text-decoration: none;
 }
 
 .site-footer a:hover {
-  color: #fff;
+  color: var(--on-dark);
   text-decoration: underline;
 }
 
@@ -1502,12 +1513,12 @@ textarea {
 
 .site-footer__brand .brand__abbr,
 .site-footer h2 {
-  color: #fff;
+  color: var(--on-dark);
 }
 
 .site-footer__brand p {
   margin-top: var(--sp-3);
-  color: #9fadc9;
+  color: var(--on-dark-3);
 }
 
 .site-footer h2 {
@@ -1516,7 +1527,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8fa3c6;
+  color: var(--on-dark-3);
   margin-bottom: var(--sp-3);
 }
 
@@ -1537,7 +1548,7 @@ textarea {
   gap: var(--sp-3);
   padding-top: var(--sp-5);
   font-size: var(--fs-xs);
-  color: #8fa3c6;
+  color: var(--on-dark-3);
 }
 
 /* 16. Utilities =========================================================== */
@@ -1574,54 +1585,55 @@ textarea {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ink: #eceef2;
-    --ink-2: #bcc2cd;
-    --ink-3: #8b93a2;
-    --line: #2a2e37;
-    --line-strong: #3d434e;
-    --bg: #111318;
-    --bg-2: #171a20;
-    --surface: #1a1d24;
-    --surface-2: #1f232b;
-    --accent: #ef6a6a;
-    --accent-ink: #f18b8b;
-    --focus: #7aa2ff;
-    --penn-blue: #0a1734;
+    --ink: #e9eded;
+    --ink-2: #b6c0c2;
+    --ink-3: #8b9699;
+    --line: #262d2f;
+    --line-strong: #394245;
+    --line-control: #657376;
+    --bg: #101314;
+    --bg-2: #161a1b;
+    --surface: #1a1f20;
+    --surface-2: #1f2527;
+    --accent: #5cc8d1;
+    --accent-ink: #8ad9e0;
+    --focus: #5cc8d1;
+    --dark-bg: #0b2429;
   }
 
   .site-header {
-    background: rgb(17 19 24 / 96%);
+    background: rgb(16 19 20 / 96%);
   }
 
   .hero {
-    background: #0a1734;
+    background: var(--dark-bg);
   }
 
   .section--ink {
-    background: #0a1734;
+    background: var(--dark-bg);
   }
 
   .site-footer {
-    background: #0a1734;
+    background: var(--dark-bg);
     border-top: 1px solid var(--line);
   }
 
   .btn--primary {
     background: var(--accent);
     border-color: var(--accent);
-    color: #1a0505;
+    color: #04191c;
   }
 
   .btn--primary:hover {
-    background: #f18b8b;
-    border-color: #f18b8b;
-    color: #1a0505;
+    background: var(--accent-ink);
+    border-color: var(--accent-ink);
+    color: #04191c;
   }
 
   .btn--light {
-    background: #eceef2;
-    border-color: #eceef2;
-    color: #0a1734;
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--dark-bg);
   }
 
   .event__date {
@@ -1630,7 +1642,7 @@ textarea {
 
   ::selection {
     background: var(--accent);
-    color: #1a0505;
+    color: #04191c;
   }
 }
 

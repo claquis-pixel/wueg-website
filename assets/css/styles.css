@@ -26,59 +26,140 @@
 /* 01. Tokens ============================================================== */
 
 :root {
-  /* Brand. Teal accents and a teal-tinted charcoal, against a grey page. */
-  --teal: #14666e;
-  --teal-dark: #0e4a51;
-  --teal-deep: #10333a;
+  /* ------------------------------------------------------------------------
+     Ramps. Straight from the WUEG Brand System (iteration one, Sept 2026).
+     Names match the spec so they line up with its JSON artifact. Do not use
+     these directly in rules — use the role tokens below. Reaching into a ramp
+     is only correct for decorative fills and chart series.
+     ------------------------------------------------------------------------ */
 
-  /* Neutrals. Cool greys, faintly teal-tinted so they sit with the brand. */
-  --ink: #171a1c;
-  --ink-2: #3a4247;
-  --ink-3: #566165;
-  --line: #d3dadb;
-  --line-strong: #b4bfc1;
-  /* Borders of actual controls (inputs, secondary buttons, the nav toggle).
-     Darker than --line-strong on purpose: WCAG 1.4.11 wants 3:1 for the
-     boundary of anything you can click, which --line-strong does not reach. */
-  --line-control: #6b7d81;
-  --bg: #e8ecec;
-  --bg-2: #dde3e3;
-  --surface: #f4f6f6;
-  --surface-2: #e8ecec;
+  /* Brand — the logo blue, extended into a ramp. brand-200 is the exact
+     light blue of the logo's outer rings. */
+  --brand-900: #03323f;
+  --brand-800: #054557;
+  --brand-700: #075c74;
+  --brand-600: #097b9a; /* THE WUEG blue, sampled from the logo */
+  --brand-500: #0b99c1;
+  --brand-400: #45b4d4;
+  --brand-300: #8acfe3;
+  --brand-200: #c2dee6;
+  --brand-100: #dfeef3;
+  --brand-50: #f0f7f9;
 
-  /* Semantic */
-  --accent: var(--teal);
-  --accent-ink: var(--teal-dark);
-  --on-accent: #ffffff;
-  --focus: #0b6e78;
+  /* Green — secondary identity, hue 142. Categorical use only. */
+  --green-800: #195730;
+  --green-700: #257442;
+  --green-600: #328f54;
+  --green-500: #41aa67;
+  --green-400: #61c284;
+  --green-300: #90d5a9;
+  --green-200: #c4e9d1;
+  --green-50: #e5f5eb;
 
-  /* Text and controls sitting on a dark section: hero, .section--ink, footer.
-     These were 11 near-duplicate hard-coded hexes before; one ramp now. */
-  --dark-bg: var(--teal-deep);
-  --on-dark: #f2f7f7;
-  --on-dark-2: #c3d3d5;
-  --on-dark-3: #97a9ad;
-  --on-dark-accent: #6fd0d6;
-  --on-dark-hover: #dce8e8;
+  /* Slate — grey-teal, the same hue at 12-24% saturation. Text and structure. */
+  --slate-900: #16262b;
+  --slate-800: #243a42;
+  --slate-700: #3d545c;
+  --slate-600: #4e6a74;
+  --slate-500: #5c7d8a;
+  --slate-400: #7f9aa4;
+  --slate-300: #a3bac2;
+  --slate-200: #cbd9de;
+  --slate-100: #e2eaed;
+  --slate-50: #f1f4f5;
 
-  /* Type */
-  --font-display: "Source Serif 4", "Iowan Old Style", "Palatino Linotype",
-    Palatino, Georgia, "Times New Roman", serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  /* Base — three fixed values, two of them the logo's own grounds. */
+  --base-white: #ffffff;
+  --base-fog: #f7f7f7;
+  --base-ink: #0b1a1f;
+
+  /* ------------------------------------------------------------------------
+     Role tokens. Components reference these, never the ramps. Every role has
+     a value in both themes; the dark values are in section 17.
+
+     Four documented deviations from the spec, all for contrast. Every one is
+     checked by the sweep described at the bottom of this file.
+     1. --surface is slate-50, not base-fog. A deliberate call to keep the
+        page reading grey rather than off-white.
+     2. --border-strong is slate-500 light / slate-400 dark, not slate-300 and
+        slate-700. The spec calls slate-300 the "3:1 class" edge color, but it
+        is only 1.89:1 on base-fog and 1.83:1 on slate-50; slate-700 is 2.22:1
+        on base-ink. Ours reach 4.00:1 and 4.01:1 across every surface in their
+        theme, so an edge is actually visible.
+     3. Text never uses --accent on --surface. brand-600 is 4.55:1 on base-fog
+        but 4.41:1 on slate-50, so it fails as body-size text on our ground.
+        --accent-strong (6.80:1) carries accent-colored text; --accent stays
+        for fills, where white-on-accent is 4.87:1. This is the same rule the
+        spec already sets for brand-50, extended to the page ground.
+     4. --focus is brand-600 in light theme, not brand-500. brand-500 on
+        slate-50 is 2.996:1 — short of the 3:1 a focus indicator needs, by a
+        hair. brand-600 is the next step down the same ramp at 4.41:1.
+     ------------------------------------------------------------------------ */
+
+  --surface: var(--slate-50);
+  --surface-raised: var(--base-white);
+  --surface-accent: var(--brand-50);
+
+  --ink: var(--slate-900);
+  --ink-secondary: var(--slate-700);
+  --ink-muted: var(--slate-600);
+
+  --accent: var(--brand-600);
+  --accent-strong: var(--brand-700);
+  --accent-soft: var(--brand-100);
+  --on-accent: var(--base-white);
+
+  /* Categorical only: committee tags, chart series, sustainability content.
+     Never a link, never a button, never in the logo. */
+  --accent-green: var(--green-700);
+  --accent-green-soft: var(--green-200);
+  --on-accent-green: var(--base-white);
+
+  --border: var(--slate-200);
+  --border-strong: var(--slate-500);
+  --focus: var(--brand-600); /* deviation 4 */
+
+  /* Full-bleed dark bands: the hero, .section--ink, the footer. brand-900 in
+     light theme (the spec's ink-inverse row), base-ink in dark. */
+  --band: var(--brand-900);
+  --on-band: var(--base-fog);
+  --on-band-secondary: var(--slate-200);
+  --on-band-muted: var(--slate-300);
+  --on-band-accent: var(--brand-200);
+  --band-face: var(--base-fog);
+  --band-face-hover: var(--brand-100);
+
+  /* Photographic panels. The rest of the field palette (steel, moss, stone)
+     is deliberately absent until there is photography to put on it. */
+  --surface-panel: #475468;
+  --on-panel: var(--base-white);
+
+  /* ------------------------------------------------------------------------
+     Type. Two faces split by job: Georgia for everything that gets read,
+     Montserrat for everything that gets used. Georgia ships on every Mac and
+     PC, so only Montserrat is loaded over the network.
+     ------------------------------------------------------------------------ */
+  --font-display: Georgia, "Times New Roman", Times, serif;
+  --font-text: Georgia, "Times New Roman", Times, serif;
+  --font-body: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
 
-  /* Fluid type scale */
-  --fs-xs: 0.78rem;
-  --fs-sm: 0.875rem;
-  --fs-base: 1rem;
-  --fs-md: clamp(1.05rem, 0.3vw + 1rem, 1.15rem);
-  --fs-lg: clamp(1.2rem, 0.6vw + 1.05rem, 1.4rem);
-  --fs-xl: clamp(1.45rem, 1vw + 1.2rem, 1.85rem);
-  --fs-2xl: clamp(1.8rem, 1.8vw + 1.35rem, 2.6rem);
-  --fs-3xl: clamp(2.2rem, 3vw + 1.5rem, 3.6rem);
-  --fs-4xl: clamp(2.6rem, 4.6vw + 1.5rem, 4.6rem);
+  /* Type scale. The spec states fixed px; these clamp to those values at
+     desktop and scale down on small screens, where a 56px headline would
+     otherwise wrap into a narrow ragged block. */
+  --fs-display-xl: clamp(2.25rem, 4vw + 1.4rem, 3.5rem); /* 56/58 700 -0.01em */
+  --fs-display-l: clamp(1.85rem, 2.2vw + 1.2rem, 2.5rem); /* 40/44 700 */
+  --fs-display-m: clamp(1.45rem, 1vw + 1.15rem, 1.75rem); /* 28/34 700 */
+  --fs-quote: clamp(1.2rem, 0.6vw + 1.05rem, 1.375rem); /* 22/32 400 */
+  --fs-body-l: 1.1875rem; /* 19/30 400 */
+  --fs-body: 1.0625rem; /* 17/28 400 */
+  --fs-body-s: 0.9375rem; /* 15/24 400 */
+  --fs-nav: 0.9375rem; /* 15/16 700 0.08em caps */
+  --fs-eyebrow: 0.8125rem; /* 13/16 600 0.1em caps */
+  --fs-ui: 0.9375rem; /* 15/20 600 sentence case */
+  --fs-data: 0.875rem; /* 14/20 500 tabular figures */
 
   /* Space */
   --sp-1: 0.25rem;
@@ -120,10 +201,10 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--surface);
   color: var(--ink);
-  font-family: var(--font-body);
-  font-size: var(--fs-base);
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -139,7 +220,7 @@ video {
 
 hr {
   border: 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
   margin: var(--sp-7) 0;
 }
 
@@ -154,14 +235,24 @@ hr {
   border-radius: 2px;
 }
 
+/* --focus is tuned for the light page ground, where it is 4.41:1. On a dark
+   band it drops to 2.81:1, under the 3:1 a focus indicator needs, so the ring
+   switches to the band's own accent tint (9.7:1 on brand-900, 12.6:1 on
+   base-ink). Never remove the ring without replacing it. */
+.hero :focus-visible,
+.section--ink :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--on-band-accent);
+}
+
 .skip-link {
   position: absolute;
   left: var(--sp-4);
   top: -100px;
   z-index: 200;
   padding: var(--sp-3) var(--sp-4);
-  background: var(--dark-bg);
-  color: var(--on-dark);
+  background: var(--band);
+  color: var(--on-band);
   border-radius: var(--radius);
   font-weight: 600;
   text-decoration: none;
@@ -179,25 +270,25 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: var(--ink);
   margin: 0 0 var(--sp-4);
   text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--fs-3xl);
+  font-size: var(--fs-display-xl);
 }
 h2 {
-  font-size: var(--fs-2xl);
+  font-size: var(--fs-display-l);
 }
 h3 {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-display-m);
 }
 h4 {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-body-l);
 }
 
 p {
@@ -206,9 +297,9 @@ p {
 }
 
 .lede {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-body-l);
   line-height: 1.55;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
   max-width: 62ch;
 }
 
@@ -237,16 +328,16 @@ p {
 .eyebrow {
   display: block;
   font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-strong);
   margin: 0 0 var(--sp-3);
 }
 
 .eyebrow--muted {
-  color: var(--ink-3);
+  color: var(--ink-muted);
 }
 
 blockquote {
@@ -254,32 +345,32 @@ blockquote {
   padding: var(--sp-2) 0 var(--sp-2) var(--sp-5);
   border-left: 3px solid var(--accent);
   font-family: var(--font-display);
-  font-size: var(--fs-lg);
+  font-size: var(--fs-quote);
   line-height: 1.5;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
 }
 
 blockquote cite {
   display: block;
   margin-top: var(--sp-3);
   font-family: var(--font-body);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   font-style: normal;
-  color: var(--ink-3);
+  color: var(--ink-muted);
 }
 
 code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  background: var(--bg-2);
+  background: var(--surface-accent);
   padding: 0.15em 0.4em;
   border-radius: 3px;
 }
 
 small,
 .small {
-  font-size: var(--fs-sm);
-  color: var(--ink-3);
+  font-size: var(--fs-body-s);
+  color: var(--ink-muted);
 }
 
 /* 04. Layout primitives =================================================== */
@@ -308,28 +399,28 @@ small,
 }
 
 .section--alt {
-  background: var(--bg-2);
-  border-block: 1px solid var(--line);
+  background: var(--surface-accent);
+  border-block: 1px solid var(--border);
 }
 
 .section--ink {
-  background: var(--dark-bg);
-  color: var(--on-dark);
+  background: var(--band);
+  color: var(--on-band);
   border-block: 0;
 }
 
 .section--ink h2,
 .section--ink h3 {
-  color: var(--on-dark);
+  color: var(--on-band);
 }
 
 .section--ink .lede,
 .section--ink p {
-  color: var(--on-dark-2);
+  color: var(--on-band-secondary);
 }
 
 .section--ink .eyebrow {
-  color: var(--on-dark-accent);
+  color: var(--on-band-accent);
 }
 
 .section-head {
@@ -386,9 +477,9 @@ small,
   z-index: 100;
   /* Nearly opaque on purpose. At 88% the body text of a long page (the
      constitution especially) reads through the bar as you scroll. */
-  background: rgb(232 236 236 / 96%);
+  background: rgb(241 244 245 / 96%);
   backdrop-filter: saturate(180%) blur(12px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .site-header__inner {
@@ -421,17 +512,18 @@ small,
 }
 
 .brand__abbr {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .brand__full {
   font-size: 0.66rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-muted);
   white-space: nowrap;
 }
 
@@ -449,11 +541,12 @@ small,
   align-items: center;
   gap: var(--sp-2);
   background: none;
-  border: 1px solid var(--line-control);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   padding: var(--sp-2) var(--sp-3);
   font: inherit;
-  font-size: var(--fs-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-ui);
   font-weight: 600;
   color: var(--ink);
   cursor: pointer;
@@ -502,9 +595,12 @@ small,
 .nav__link {
   display: inline-block;
   padding: var(--sp-2) 0;
-  font-size: var(--fs-sm);
-  font-weight: 500;
-  color: var(--ink-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-nav);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
   text-decoration: none;
   border-bottom: 2px solid transparent;
   transition: color 0.15s ease, border-color 0.15s ease;
@@ -512,7 +608,7 @@ small,
 
 .nav__link:hover {
   color: var(--ink);
-  border-bottom-color: var(--line-strong);
+  border-bottom-color: var(--border-strong);
 }
 
 .nav__link[aria-current="page"] {
@@ -532,8 +628,8 @@ small,
     align-items: stretch;
     gap: 0;
     padding: var(--sp-4) var(--sp-5) var(--sp-6);
-    background: var(--surface);
-    border-bottom: 1px solid var(--line);
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow);
     max-height: calc(100vh - var(--header-h));
     overflow-y: auto;
@@ -550,18 +646,18 @@ small,
   }
 
   .nav__list li + li {
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--border);
   }
 
   .nav__link {
     padding: var(--sp-3) 0;
-    font-size: var(--fs-md);
+    font-size: var(--fs-nav);
     border-bottom: 0;
   }
 
   .nav__link[aria-current="page"] {
     border-bottom: 0;
-    color: var(--accent);
+    color: var(--accent-strong);
   }
 
   .nav .btn {
@@ -579,19 +675,19 @@ small,
 /* 06. Buttons & links ===================================================== */
 
 a {
-  color: var(--accent-ink);
+  color: var(--accent-strong);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
 a:hover {
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 /* Inline links only. Without :not(.btn) this beats .btn--light on
    specificity and paints pale blue text onto a white button. */
 .section--ink a:not(.btn) {
-  color: var(--on-dark-accent);
+  color: var(--on-band-accent);
 }
 
 .btn {
@@ -602,7 +698,7 @@ a:hover {
   border: 1px solid transparent;
   border-radius: var(--radius);
   font-family: var(--font-body);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-ui);
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -622,59 +718,60 @@ a:hover {
 }
 
 .btn--primary:hover {
-  background: var(--accent-ink);
-  border-color: var(--accent-ink);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
   color: var(--on-accent);
 }
 
 .btn--secondary {
   background: transparent;
-  border-color: var(--line-control);
+  border-color: var(--border-strong);
   color: var(--ink);
 }
 
 .btn--secondary:hover {
-  border-color: var(--ink-2);
-  background: var(--surface);
+  border-color: var(--ink-secondary);
+  background: var(--surface-raised);
   color: var(--ink);
 }
 
 .btn--ghost {
   background: transparent;
   border-color: rgb(255 255 255 / 35%);
-  color: var(--on-dark);
+  color: var(--on-band);
 }
 
 .btn--ghost:hover {
   background: rgb(255 255 255 / 10%);
-  border-color: var(--on-dark);
-  color: var(--on-dark);
+  border-color: var(--on-band);
+  color: var(--on-band);
 }
 
 .btn--light {
-  background: var(--on-dark);
-  border-color: var(--on-dark);
-  color: var(--dark-bg);
+  background: var(--band-face);
+  border-color: var(--band-face);
+  color: var(--band);
 }
 
 .btn--light:hover {
-  background: var(--on-dark-hover);
-  color: var(--dark-bg);
+  background: var(--band-face-hover);
+  color: var(--band);
 }
 
 .btn--sm {
   padding: 0.5em 1em;
-  font-size: var(--fs-xs);
+  font-size: var(--fs-body-s);
 }
 
 .arrow-link {
+  font-family: var(--font-body);
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-ui);
   font-weight: 600;
   text-decoration: none;
-  color: var(--accent-ink);
+  color: var(--accent-strong);
 }
 
 .arrow-link::after {
@@ -691,8 +788,8 @@ a:hover {
 .hero {
   position: relative;
   overflow: hidden;
-  background: var(--dark-bg);
-  color: var(--on-dark);
+  background: var(--band);
+  color: var(--on-band);
   padding-block: var(--sp-9);
 }
 
@@ -725,8 +822,8 @@ a:hover {
 }
 
 .hero h1 {
-  font-size: var(--fs-4xl);
-  color: var(--on-dark);
+  font-size: var(--fs-display-xl);
+  color: var(--on-band);
   margin-bottom: var(--sp-5);
   /* `balance` (inherited from the shared heading rule) equalizes line lengths,
      which on a heading this long produces a tall, narrow, ragged block. Let it
@@ -735,14 +832,14 @@ a:hover {
 }
 
 .hero__lede {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-body-l);
   line-height: 1.5;
-  color: var(--on-dark-2);
+  color: var(--on-band-secondary);
   margin-bottom: var(--sp-6);
 }
 
 .hero__eyebrow {
-  color: var(--on-dark-accent);
+  color: var(--on-band-accent);
 }
 
 .hero__actions {
@@ -753,8 +850,8 @@ a:hover {
 
 /* Compact hero for interior pages */
 .page-hero {
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--line);
+  background: var(--surface-accent);
+  border-bottom: 1px solid var(--border);
   padding-block: var(--sp-7);
 }
 
@@ -793,8 +890,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   padding: var(--sp-5);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
@@ -804,13 +901,13 @@ a:hover {
 }
 
 .card h3 {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-display-m);
   margin-bottom: var(--sp-3);
 }
 
 .card p {
-  color: var(--ink-2);
-  font-size: var(--fs-sm);
+  color: var(--ink-secondary);
+  font-size: var(--fs-body-s);
   line-height: 1.6;
 }
 
@@ -827,7 +924,7 @@ a:hover {
 }
 
 .card--link:hover {
-  border-color: var(--line-strong);
+  border-color: var(--border-strong);
   box-shadow: var(--shadow);
   transform: translateY(-2px);
   color: inherit;
@@ -839,9 +936,9 @@ a:hover {
 
 .card__num {
   font-family: var(--font-body);
-  font-size: var(--fs-xs);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-strong);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-bottom: var(--sp-3);
@@ -851,7 +948,7 @@ a:hover {
    against the `.card p` rule above. */
 .card p.card__def {
   font-family: var(--font-display);
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   font-weight: 600;
   line-height: 1.4;
   color: var(--ink);
@@ -865,13 +962,13 @@ a:hover {
 }
 
 .pillar h3 {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-display-m);
   margin-bottom: var(--sp-2);
 }
 
 .pillar p {
-  color: var(--ink-2);
-  font-size: var(--fs-sm);
+  color: var(--ink-secondary);
+  font-size: var(--fs-body-s);
   margin-bottom: 0;
 }
 
@@ -881,8 +978,8 @@ a:hover {
   flex-direction: column;
   gap: var(--sp-3);
   padding: var(--sp-5);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
 
@@ -895,14 +992,14 @@ a:hover {
 
 .committee h3 {
   margin: 0;
-  font-size: var(--fs-lg);
+  font-size: var(--fs-display-m);
 }
 
 .committee ul {
   margin: 0;
   padding-left: 1.1em;
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
 }
 
 .committee li + li {
@@ -915,8 +1012,8 @@ a:hover {
   flex-direction: column;
   gap: var(--sp-2);
   padding: var(--sp-4);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
 
@@ -925,28 +1022,29 @@ a:hover {
   width: 100%;
   object-fit: cover;
   border-radius: var(--radius);
-  background: var(--bg-2);
+  background: var(--surface-accent);
   margin-bottom: var(--sp-2);
 }
 
 .person__name {
   font-family: var(--font-display);
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   font-weight: 600;
   margin: 0;
   line-height: 1.25;
 }
 
 .person__role {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-strong);
   margin: 0;
 }
 
 .person__meta {
-  font-size: var(--fs-xs);
-  color: var(--ink-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-s);
+  color: var(--ink-muted);
   margin: 0;
 }
 
@@ -956,11 +1054,11 @@ a:hover {
   grid-template-columns: 74px minmax(0, 1fr);
   gap: var(--sp-4);
   padding: var(--sp-4) 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .event:last-child {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .event__date {
@@ -969,40 +1067,43 @@ a:hover {
   align-items: center;
   justify-content: flex-start;
   padding: var(--sp-2) 0;
-  background: var(--bg-2);
+  background: var(--surface-accent);
   border-radius: var(--radius);
   height: fit-content;
 }
 
 .event__month {
-  font-size: var(--fs-xs);
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .event__day {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-display-m);
   font-weight: 700;
   line-height: 1.1;
 }
 
 .event__body h3 {
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   margin-bottom: var(--sp-1);
 }
 
 .event__body p {
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
   margin-bottom: var(--sp-2);
 }
 
 .event__meta {
-  font-size: var(--fs-xs);
-  color: var(--ink-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-s);
+  color: var(--ink-muted);
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-3);
@@ -1014,15 +1115,15 @@ a:hover {
   flex-direction: column;
   gap: var(--sp-2);
   padding: var(--sp-5) 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .post:last-child {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .post h3 {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-display-m);
   margin: 0;
 }
 
@@ -1032,20 +1133,21 @@ a:hover {
 }
 
 .post h3 a:hover {
-  color: var(--accent);
+  color: var(--accent-strong);
   text-decoration: underline;
 }
 
 .post__meta {
-  font-size: var(--fs-xs);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-s);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-muted);
 }
 
 .post p {
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
   margin: 0;
   max-width: 70ch;
 }
@@ -1053,20 +1155,29 @@ a:hover {
 /* Tag / pill */
 .tag {
   display: inline-block;
-  padding: 0.2em 0.65em;
-  border: 1px solid var(--line-control);
+  padding: 0.2em 0.7em;
+  border: 1px solid var(--accent-green);
   border-radius: 999px;
-  font-size: var(--fs-xs);
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
   font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--ink-2);
-  background: var(--surface);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--accent-green-soft);
+  text-decoration: none;
+}
+
+a.tag:hover {
+  border-color: var(--accent-green);
+  background: var(--accent-green);
+  color: var(--on-accent-green);
 }
 
 .tag--accent {
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-  color: var(--accent-ink);
-  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  background: var(--accent-soft);
 }
 
 /* Partner logo strip */
@@ -1083,20 +1194,20 @@ a:hover {
   flex: 1 1 150px;
   min-height: 78px;
   padding: var(--sp-4);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   font-weight: 600;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
   text-align: center;
 }
 
 /* Callout */
 .callout {
   padding: var(--sp-5);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
+  background: var(--surface-accent);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
 }
@@ -1106,13 +1217,13 @@ a:hover {
 }
 
 .callout h3 {
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   margin-bottom: var(--sp-2);
 }
 
 .callout p {
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
 }
 
 /* 09. Stats =============================================================== */
@@ -1126,7 +1237,8 @@ a:hover {
 .stat__value {
   display: block;
   font-family: var(--font-display);
-  font-size: var(--fs-2xl);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-display-l);
   font-weight: 700;
   line-height: 1;
   color: var(--ink);
@@ -1134,33 +1246,36 @@ a:hover {
 }
 
 .section--ink .stat__value {
-  color: var(--on-dark);
+  color: var(--on-band);
 }
 
 .stat__label {
   display: block;
-  font-size: var(--fs-sm);
-  color: var(--ink-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-s);
+  color: var(--ink-muted);
   line-height: 1.4;
 }
 
 .section--ink .stat__label {
-  color: var(--on-dark-3);
+  color: var(--on-band-muted);
 }
 
 /* 10. Tables ============================================================== */
 
 .table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--surface-raised);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--fs-sm);
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-data);
 }
 
 th,
@@ -1168,16 +1283,16 @@ td {
   padding: var(--sp-3) var(--sp-4);
   text-align: left;
   vertical-align: top;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 thead th {
-  background: var(--bg-2);
-  font-size: var(--fs-xs);
+  background: var(--surface-accent);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
   white-space: nowrap;
 }
 
@@ -1188,11 +1303,11 @@ tbody tr:last-child td {
 /* 11. Accordion / FAQ ===================================================== */
 
 .faq {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .faq__item {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .faq__item > summary {
@@ -1202,7 +1317,7 @@ tbody tr:last-child td {
   gap: var(--sp-4);
   padding: var(--sp-4) 0;
   font-family: var(--font-display);
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   font-weight: 600;
   cursor: pointer;
   list-style: none;
@@ -1218,7 +1333,7 @@ tbody tr:last-child td {
   font-family: var(--font-body);
   font-size: 1.3rem;
   line-height: 1;
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .faq__item[open] > summary::after {
@@ -1227,8 +1342,8 @@ tbody tr:last-child td {
 
 .faq__answer {
   padding-bottom: var(--sp-4);
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
   max-width: 68ch;
 }
 
@@ -1242,7 +1357,7 @@ tbody tr:last-child td {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-left: 2px solid var(--line);
+  border-left: 2px solid var(--border);
 }
 
 .timeline__item {
@@ -1263,27 +1378,28 @@ tbody tr:last-child td {
   height: 12px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid var(--bg);
+  border: 2px solid var(--surface);
 }
 
 .timeline__when {
+  font-family: var(--font-body);
   display: block;
-  font-size: var(--fs-xs);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-strong);
   margin-bottom: var(--sp-1);
 }
 
 .timeline__item h3 {
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   margin-bottom: var(--sp-2);
 }
 
 .timeline__item p {
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
+  font-size: var(--fs-body-s);
+  color: var(--ink-secondary);
   margin-bottom: 0;
   max-width: 62ch;
 }
@@ -1297,18 +1413,18 @@ tbody tr:last-child td {
   max-height: calc(100vh - var(--header-h) - var(--sp-7));
   overflow-y: auto;
   padding: var(--sp-4);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
 
 .toc h2 {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-family: var(--font-body);
-  color: var(--ink-3);
+  color: var(--ink-muted);
   margin-bottom: var(--sp-3);
 }
 
@@ -1330,9 +1446,9 @@ tbody tr:last-child td {
 .toc a {
   display: block;
   padding: var(--sp-1) 0;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   text-decoration: none;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
   border-left: 2px solid transparent;
   padding-left: var(--sp-3);
   margin-left: calc(var(--sp-3) * -1 + var(--sp-3));
@@ -1340,13 +1456,14 @@ tbody tr:last-child td {
 
 .toc a::before {
   content: counter(toc) ". ";
-  color: var(--ink-3);
+  color: var(--ink-muted);
 }
 
 .toc a:hover,
 .toc a.is-active {
-  color: var(--accent-ink);
+  color: var(--accent-strong);
   border-left-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 @media (max-width: 899px) {
@@ -1358,10 +1475,10 @@ tbody tr:last-child td {
 
 /* Legal / constitution body */
 .legal h2 {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-display-m);
   padding-top: var(--sp-5);
   margin-top: var(--sp-6);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .legal h2:first-child {
@@ -1371,18 +1488,18 @@ tbody tr:last-child td {
 }
 
 .legal h3 {
-  font-size: var(--fs-md);
+  font-size: var(--fs-body-l);
   margin-top: var(--sp-5);
   margin-bottom: var(--sp-3);
 }
 
 .legal h4 {
   font-family: var(--font-body);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-ui);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-muted);
   margin-top: var(--sp-4);
   margin-bottom: var(--sp-2);
 }
@@ -1405,9 +1522,9 @@ tbody tr:last-child td {
 
 .legal p,
 .legal li {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   line-height: 1.7;
-  color: var(--ink-2);
+  color: var(--ink-secondary);
 }
 
 /* 14. Forms =============================================================== */
@@ -1424,14 +1541,15 @@ tbody tr:last-child td {
 }
 
 .field label {
-  font-size: var(--fs-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-ui);
   font-weight: 600;
   color: var(--ink);
 }
 
 .field .hint {
-  font-size: var(--fs-xs);
-  color: var(--ink-3);
+  font-size: var(--fs-body-s);
+  color: var(--ink-muted);
 }
 
 input[type="text"],
@@ -1441,10 +1559,10 @@ textarea {
   width: 100%;
   padding: 0.65em 0.8em;
   font: inherit;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
   color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--line-control);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
 }
 
@@ -1476,19 +1594,19 @@ textarea {
 /* 15. Footer ============================================================== */
 
 .site-footer {
-  background: var(--dark-bg);
-  color: var(--on-dark-2);
+  background: var(--band);
+  color: var(--on-band-secondary);
   padding-block: var(--sp-7) var(--sp-5);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-body-s);
 }
 
 .site-footer a {
-  color: var(--on-dark-2);
+  color: var(--on-band-secondary);
   text-decoration: none;
 }
 
 .site-footer a:hover {
-  color: var(--on-dark);
+  color: var(--on-band);
   text-decoration: underline;
 }
 
@@ -1513,21 +1631,21 @@ textarea {
 
 .site-footer__brand .brand__abbr,
 .site-footer h2 {
-  color: var(--on-dark);
+  color: var(--on-band);
 }
 
 .site-footer__brand p {
   margin-top: var(--sp-3);
-  color: var(--on-dark-3);
+  color: var(--on-band-muted);
 }
 
 .site-footer h2 {
   font-family: var(--font-body);
-  font-size: var(--fs-xs);
+  font-size: var(--fs-eyebrow);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--on-dark-3);
+  color: var(--on-band-muted);
   margin-bottom: var(--sp-3);
 }
 
@@ -1542,13 +1660,14 @@ textarea {
 }
 
 .site-footer__bottom {
+  font-family: var(--font-body);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--sp-3);
   padding-top: var(--sp-5);
-  font-size: var(--fs-xs);
-  color: var(--on-dark-3);
+  font-size: var(--fs-eyebrow);
+  color: var(--on-band-muted);
 }
 
 /* 16. Utilities =========================================================== */
@@ -1583,66 +1702,45 @@ textarea {
 
 /* 17. Dark mode =========================================================== */
 
+/* The dark theme is entirely a re-point of the role tokens — the spec gives
+   every role a value in both themes, so almost no rule needs a dark variant.
+   Only two do: the header scrim (a literal rgba, so it cannot reference a
+   token) and the footer's top border. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --ink: #e9eded;
-    --ink-2: #b6c0c2;
-    --ink-3: #8b9699;
-    --line: #262d2f;
-    --line-strong: #394245;
-    --line-control: #657376;
-    --bg: #101314;
-    --bg-2: #161a1b;
-    --surface: #1a1f20;
-    --surface-2: #1f2527;
-    --accent: #5cc8d1;
-    --accent-ink: #8ad9e0;
-    --focus: #5cc8d1;
-    --dark-bg: #0b2429;
+    --surface: var(--base-ink);
+    --surface-raised: var(--slate-900);
+    --surface-accent: var(--slate-800);
+
+    --ink: var(--base-fog);
+    --ink-secondary: var(--slate-200);
+    --ink-muted: var(--slate-300);
+
+    --accent: var(--brand-400);
+    --accent-strong: var(--brand-300);
+    --accent-soft: var(--slate-800);
+    --on-accent: var(--brand-900);
+
+    --accent-green: var(--green-400);
+    --accent-green-soft: var(--green-800);
+    --on-accent-green: var(--base-ink);
+
+    --border: var(--slate-800);
+    /* slate-400, not the spec's slate-700 (2.22:1 on base-ink) and not the
+       light theme's slate-500 (2.70:1 on surface-accent). See section 01. */
+    --border-strong: var(--slate-400);
+    --focus: var(--brand-300);
+
+    --band: var(--base-ink);
+    --surface-panel: #242c38; /* steel-900 */
   }
 
   .site-header {
-    background: rgb(16 19 20 / 96%);
-  }
-
-  .hero {
-    background: var(--dark-bg);
-  }
-
-  .section--ink {
-    background: var(--dark-bg);
+    background: rgb(11 26 31 / 96%); /* base-ink at 96% */
   }
 
   .site-footer {
-    background: var(--dark-bg);
-    border-top: 1px solid var(--line);
-  }
-
-  .btn--primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #04191c;
-  }
-
-  .btn--primary:hover {
-    background: var(--accent-ink);
-    border-color: var(--accent-ink);
-    color: #04191c;
-  }
-
-  .btn--light {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--dark-bg);
-  }
-
-  .event__date {
-    background: var(--surface-2);
-  }
-
-  ::selection {
-    background: var(--accent);
-    color: #04191c;
+    border-top: 1px solid var(--border);
   }
 }
 

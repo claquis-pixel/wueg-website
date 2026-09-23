@@ -96,10 +96,63 @@ in `assets/img/team/` and update the `src`.
 In `insights.html`, copy one `<article class="post">` block.
 
 ### Colors and fonts
-All in the `:root` block at the top of `assets/css/styles.css`. Change
-`--penn-red` once and it updates everywhere. Dark mode is handled automatically
-by a matching block near the bottom of the file — if you change a brand color,
-glance at that block too.
+
+**The source of truth is the WUEG Brand System** (iteration one, September
+2026) — the PDF, and the Claude design-system artifact that holds the same
+tokens as JSON. `assets/css/styles.css` implements it. If you want to change a
+color, change it in the brand system first, then here.
+
+The `:root` block at the top of the stylesheet has two layers, and the
+distinction matters:
+
+1. **Ramps** — `--brand-900` … `--brand-50`, `--green-*`, `--slate-*`,
+   `--base-*`. The raw palette, named exactly as the spec names it. **Do not
+   use these in rules.** Reaching into a ramp is only correct for a decorative
+   fill or a chart series.
+2. **Role tokens** — what components actually reference. Each one has a light
+   value in `:root` and a dark value in the `prefers-color-scheme: dark` block
+   near the bottom.
+
+The roles worth knowing:
+
+| Role | What it controls |
+| --- | --- |
+| `--surface`, `--surface-raised` | The page ground, and cards sitting on it |
+| `--surface-accent` | Tinted bands, callouts, table headers |
+| `--ink`, `--ink-secondary`, `--ink-muted` | Body text, from darkest to most muted |
+| `--accent` | Brand blue as a **fill**: buttons, active states |
+| `--accent-strong` | Brand blue as **text**: links, eyebrows |
+| `--accent-green` | Committee tags and categories — see the rule below |
+| `--band`, `--on-band*` | The hero, dark bands, and footer |
+| `--border` | Ordinary dividers |
+| `--border-strong` | Borders of inputs and buttons — keep this at 3:1 |
+| `--focus` | The focus ring. Never remove it without replacing it |
+
+**Green is categorical only.** Links, buttons and active states stay
+`--accent`; green marks and categorizes (committee tags, chart series,
+sustainability content). A green button beside a blue one reads as a competing
+primary action. Green never goes in the logo and is never a link color.
+
+**Two faces, split by job.** Georgia carries everything that gets *read* —
+headlines, body copy, pull quotes. Montserrat carries everything that gets
+*used* — navigation, buttons, labels, tags, data. Georgia ships on every Mac
+and PC, so the only font loaded over the network is Montserrat, via the
+`<link>` in each page's `<head>`. Caps and letter-spacing belong to nav and
+eyebrow only.
+
+Four role values deviate from the spec, each for a contrast reason, each
+documented in a comment in section 01 of the stylesheet. Read those before
+"correcting" them back.
+
+Three spec roles are defined but not yet used by any rule:
+`--surface-panel` / `--on-panel` (waiting on photography) and the rest of the
+field palette (steel, moss, stone) which is not in the stylesheet at all yet.
+
+If you introduce or change a color, check it against whichever background it
+lands on — body text needs 4.5:1, and anything that must read as an edge or a
+focus ring needs 3:1.
+[webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/)
+does one pair at a time.
 
 ### Previewing your changes
 Double-clicking an HTML file works for most things. For the real thing, run a
